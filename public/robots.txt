@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas
+Disallow: /api/
+Disallow: /_next/
+Disallow: /.well-known/
+
+# Sitemap location
+Sitemap: https://calosbicho.pt/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
