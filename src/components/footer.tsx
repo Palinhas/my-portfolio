@@ -11,6 +11,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Avatar } from "@/components/ui/avatar";
 import { useRef } from "react";
 
 const footerLinks = {
@@ -75,9 +76,7 @@ export default function Footer() {
             className="space-y-4"
           >
             <div className="flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold">
-                CB
-              </div>
+              <Avatar size="md" badgeText="C" />
               <div>
                 <h3 className="font-semibold">Carlos Bicho</h3>
                 <p className="text-sm text-muted-foreground">
@@ -169,7 +168,7 @@ export default function Footer() {
                       variant="outline"
                       size="icon"
                       asChild
-                      className={`h-10 w-10 ${social.color}`}
+                      className={`h-10 w-10 shadow-consistent-sm ${social.color}`}
                     >
                       <a
                         href={social.href}

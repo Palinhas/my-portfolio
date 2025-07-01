@@ -1,33 +1,66 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import { CommandMenu } from "@/components/command-menu";
+import QueryProvider from "@/providers/query-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calosbicho.pt";
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://calosbicho.pt");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: "Carlos Bicho - Desenvolvedor Full-Stack",
-    template: "%s | Carlos Bicho",
-  },
-  description:
-    "Desenvolvedor Full-Stack especializado em React, Next.js e TypeScript. Criando experiências web modernas e escaláveis.",
+  title: "Carlos Bicho - Portfolio",
+  description: "Portfolio pessoal de Carlos Bicho, desenvolvedor Full-Stack",
   keywords: [
     "Carlos Bicho",
-    "Desenvolvedor",
+    "Portfolio",
+    "Developer",
     "Full-Stack",
     "React",
     "Next.js",
-    "TypeScript",
-    "Portfolio",
   ],
   authors: [{ name: "Carlos Bicho" }],
   creator: "Carlos Bicho",
+  openGraph: {
+    type: "website",
+    locale: "pt_PT",
+    url: siteUrl,
+    title: "Carlos Bicho - Portfolio",
+    description: "Portfolio pessoal de Carlos Bicho, desenvolvedor Full-Stack",
+    siteName: "Carlos Bicho Portfolio",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Carlos Bicho - Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Carlos Bicho - Portfolio",
+    description: "Portfolio pessoal de Carlos Bicho, desenvolvedor Full-Stack",
+    images: ["/og-image.jpg"],
+  },
   robots: {
     index: true,
     follow: true,
@@ -39,54 +72,50 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  openGraph: {
-    type: "website",
-    locale: "pt_PT",
-    siteName: "Carlos Bicho - Portfolio",
-    title: "Carlos Bicho - Desenvolvedor Full-Stack",
-    description:
-      "Desenvolvedor Full-Stack especializado em React, Next.js e TypeScript. Criando experiências web modernas e escaláveis.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Carlos Bicho - Desenvolvedor Full-Stack",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Carlos Bicho - Desenvolvedor Full-Stack",
-    description:
-      "Desenvolvedor Full-Stack especializado em React, Next.js e TypeScript.",
-    images: ["/og-image.jpg"],
+  verification: {
+    google: "your-google-verification-code",
   },
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="pt" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-      </head>
-      <body className={inter.className}>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen bg-background font-sans`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main>{children}</main>
-          <Toaster />
+          <QueryProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+
+              {/* Command Menu - Global */}
+              <CommandMenu />
+
+              {/* Command Menu Indicator */}
+              <div className="fixed bottom-4 right-4 z-40">
+                <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full glass border text-xs text-muted-foreground">
+                  <kbd className="px-1.5 py-0.5 rounded border bg-background/50">
+                    ⌘
+                  </kbd>
+                  <kbd className="px-1.5 py-0.5 rounded border bg-background/50">
+                    K
+                  </kbd>
+                  <span>para comandos</span>
+                </div>
+              </div>
+            </div>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -6,7 +6,6 @@ import FeaturedProjects from "@/components/sections/featured-projects";
 import CTASection from "@/components/sections/cta-section";
 import { PersonSchema, WebsiteSchema } from "@/components/schema-markup";
 import { Metadata } from "next";
-import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Carlos Bicho - Desenvolvedor Full-Stack | Portfolio",
@@ -61,14 +60,13 @@ export default async function Home() {
       />
       <WebsiteSchema url={siteUrl} name="Carlos Bicho - Portfolio" />
 
-      <div className="min-h-screen">
+      <div className="relative min-h-screen">
         <HeroSection />
         <TechStack />
         <RecentBlogPosts posts={recentPosts} />
         <FeaturedProjects />
         <CTASection />
       </div>
-      <Footer />
     </>
   );
 }

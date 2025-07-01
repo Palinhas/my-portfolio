@@ -49,15 +49,12 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link href="/" className="flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg gradient-primary text-white dark:text-white font-bold shadow-lg">
                 CB
               </div>
-              <span className="hidden font-bold sm:inline-block">
+              <span className="hidden font-bold text-foreground sm:inline-block">
                 Carlos Bicho
               </span>
             </Link>
@@ -128,10 +125,7 @@ export default function Navbar() {
           </motion.div>
 
           {/* Mobile menu button */}
-          <motion.div
-            whileTap={{ scale: 0.9 }}
-            className="md:hidden"
-          >
+          <motion.div whileTap={{ scale: 0.9 }} className="md:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -204,29 +198,45 @@ export default function Navbar() {
                   );
                 })}
 
-                {/* Mobile Social Links */}
+                {/* Mobile Social Links + Theme Toggle */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.4 }}
-                  className="flex space-x-2 px-3 pt-4"
+                  className="border-t border-border pt-4 mt-4"
                 >
-                  {socialLinks.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Button key={item.name} variant="outline" size="sm" asChild>
-                        <a
-                          href={item.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center space-x-2"
+                  {/* Theme Toggle Mobile */}
+                  <div className="flex items-center justify-between px-3 mb-4">
+                    <span className="text-sm font-medium text-muted-foreground">
+                      Tema
+                    </span>
+                    <ThemeToggle />
+                  </div>
+
+                  {/* Social Links */}
+                  <div className="flex space-x-2 px-3">
+                    {socialLinks.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Button
+                          key={item.name}
+                          variant="outline"
+                          size="sm"
+                          asChild
                         >
-                          <Icon className="h-4 w-4" />
-                          <span>{item.name}</span>
-                        </a>
-                      </Button>
-                    );
-                  })}
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center space-x-2"
+                          >
+                            <Icon className="h-4 w-4" />
+                            <span>{item.name}</span>
+                          </a>
+                        </Button>
+                      );
+                    })}
+                  </div>
                 </motion.div>
               </div>
             </motion.div>

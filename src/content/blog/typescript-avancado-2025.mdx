@@ -1,0 +1,135 @@
+---
+title: "TypeScript Avançado: Patterns Modernos para Aplicações Enterprise"
+excerpt: "Explore técnicas avançadas de TypeScript que elevam a qualidade do código e reduzem bugs em aplicações de grande escala. Patterns reais usados em produção."
+date: "2025-01-25"
+author: "Carlos Bicho"
+tags: ["TypeScript", "Advanced Patterns", "Enterprise", "Type Safety", "Architecture"]
+image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=630&fit=crop&auto=format&q=80"
+readTime: 12
+featured: true
+---
+
+# TypeScript Avançado: Patterns Modernos para Aplicações Enterprise
+
+Depois de anos desenvolvendo aplicações TypeScript em **escala enterprise**, compilei os **patterns mais poderosos** que transformam código comum em **arquiteturas robustas** e **type-safe**.
+
+## 🎯 Branded Types: Segurança Extrema
+
+### O Problema dos Primitive Obsession
+
+```tsx
+// ❌ Código perigoso - todos são strings
+function transferMoney(fromAccount: string, toAccount: string, amount: string) {
+  // Fácil trocar a ordem dos parâmetros!
+}
+
+transferMoney("123.45", "ACC001", "ACC002") // Bug silencioso
+```
+
+### A Solução: Branded Types
+
+```tsx
+// ✅ Branded Types - impossível confundir
+declare const __brand: unique symbol
+type Brand<T, TBrand> = T & { [__brand]: TBrand }
+
+type AccountId = Brand<string, 'AccountId'>
+type Amount = Brand<number, 'Amount'>
+type Currency = Brand<string, 'Currency'>
+
+// Factory functions type-safe
+const createAccountId = (id: string): AccountId => {
+  if (!/^ACC\d{3}$/.test(id)) throw new Error('Invalid account format')
+  return id as AccountId
+}
+
+const createAmount = (value: number, currency: Currency): Amount => {
+  if (value < 0) throw new Error('Amount cannot be negative')
+  return value as Amount
+}
+
+// Uso impossível de confundir
+function transferMoney(
+  from: AccountId, 
+  to: AccountId, 
+  amount: Amount,
+  currency: Currency
+) {
+  // TypeScript garante que os tipos estão corretos
+}
+
+// ✅ Uso correto - compile-time safety
+const fromAcc = createAccountId("ACC001")
+const toAcc = createAccountId("ACC002") 
+const amount = createAmount(100, "EUR" as Currency)
+
+transferMoney(fromAcc, toAcc, amount, "EUR" as Currency)
+```
+
+## 🔥 Template Literal Types: APIs Type-Safe
+
+### Rotas Dinâmicas com Validação
+
+```tsx
+// Definição de rotas com parâmetros extraídos automaticamente
+type ExtractParams<T extends string> = 
+  T extends `${infer _Start}:${infer Param}/${infer Rest}`
+    ? { [K in Param | keyof ExtractParams<`/${Rest}`>]: string }
+    : T extends `${infer _Start}:${infer Param}`
+    ? { [K in Param]: string }
+    : {}
+
+type ApiRoutes = 
+  | '/users/:userId/posts/:postId'
+  | '/products/:productId'
+  | '/orders/:orderId/items/:itemId'
+
+// Router type-safe automático
+class TypeSafeRouter {
+  get<T extends ApiRoutes>(
+    route: T,
+    params: ExtractParams<T>
+  ): Promise<Response> {
+    const url = this.buildUrl(route, params)
+    return fetch(url)
+  }
+
+  private buildUrl<T extends ApiRoutes>(
+    route: T, 
+    params: ExtractParams<T>
+  ): string {
+    let url = route as string
+    for (const [key, value] of Object.entries(params)) {
+      url = url.replace(`:${key}`, value)
+    }
+    return url
+  }
+}
+
+// ✅ Uso com autocomplete e validação
+const router = new TypeSafeRouter()
+
+// TypeScript sabe exatamente quais parâmetros são necessários
+router.get('/users/:userId/posts/:postId', {
+  userId: '123',
+  postId: '456'
+})
+
+// ❌ Erro de compilação - parâmetro em falta
+router.get('/products/:productId', {}) // Error: Property 'productId' is missing
+```
+
+## 💡 Conclusão
+
+Estes **patterns avançados** transformam TypeScript de uma ferramenta de types básicos numa **linguagem de programação a nível de tipos**. Em aplicações enterprise, a diferença entre código comum e código **type-safe** pode significar:
+
+- **90% menos bugs** relacionados com tipos
+- **Refactoring seguro** em codebases grandes  
+- **Documentação viva** através dos tipos
+- **Developer Experience** superior com autocomplete inteligente
+
+O futuro do desenvolvimento JavaScript/TypeScript está na **type safety extrema** - e estes patterns são o caminho para lá chegar.
+
+---
+
+*Quer ver mais patterns avançados? Este artigo faz parte da série "TypeScript Mastery" onde exploramos as técnicas mais sofisticadas para desenvolvimento enterprise.* 
