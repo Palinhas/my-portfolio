@@ -221,7 +221,7 @@ export function MagneticButton({
       {...buttonProps}
     >
       {/* Container do conteúdo */}
-      <div className="relative z-10">
+      <div className="relative z-10 flex items-center gap-2">
         {children}
       </div>
       

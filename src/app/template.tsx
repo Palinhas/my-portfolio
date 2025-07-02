@@ -1,15 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { variants } from "@/lib/motion-tokens";
+import { animationPresets } from "@/lib/motion-tokens";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      initial="initial"
-      animate="in"
-      exit="out"
-      variants={variants.pageTransition}
+      initial={animationPresets.pageEnter.initial}
+      animate={animationPresets.pageEnter.animate}
+      transition={animationPresets.pageEnter.transition}
       className="min-h-screen"
     >
       {children}

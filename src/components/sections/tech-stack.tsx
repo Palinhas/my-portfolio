@@ -17,7 +17,7 @@ import {
   SiRadixui,
 } from "react-icons/si";
 import { FaAws } from "react-icons/fa";
-import { variants, scrollVariants } from "@/lib/motion-tokens";
+import { variants } from "@/lib/motion-tokens";
 
 const technologies = [
   {
@@ -170,7 +170,7 @@ export default function TechStack() {
       </div>
       {/* Header */}
       <motion.div
-        variants={scrollVariants.slideUp}
+        variants={variants.slideUp}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         className="text-center mb-16"

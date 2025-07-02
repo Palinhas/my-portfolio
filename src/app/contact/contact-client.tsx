@@ -323,17 +323,19 @@ export default function ContactPageClient() {
                       disabled={isSubmitting}
                       className="w-full text-white font-medium py-3 px-6 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
                     >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />A
-                          enviar...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          Enviar Mensagem
-                        </>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>A enviar...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-5 h-5" />
+                            <span>Enviar Mensagem</span>
+                          </>
+                        )}
+                      </div>
                     </MagneticButton>
                   </form>
                 </CardContent>

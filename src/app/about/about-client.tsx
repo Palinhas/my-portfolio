@@ -1,521 +1,351 @@
+/**
+ * @fileoverview About Page Client Component
+ * 
+ * Componente client-side da página About com animações e interatividade.
+ * Implementa timeline de experiência, skills showcase e CTA sections.
+ * 
+ * @author Carlos Bicho
+ * @version 2.0.0
+ * @since 2025-01-29
+ */
+
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Avatar } from "@/components/ui/avatar";
-import Link from "next/link";
 import {
   Calendar,
   MapPin,
-  Code,
-  Coffee,
-  Music,
-  Camera,
-  ArrowRight,
+  Code2,
   Sparkles,
+  ArrowRight,
+  Download,
+  Mail,
+  ExternalLink,
 } from "lucide-react";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { variants, scrollVariants } from "@/lib/motion-tokens";
+import { variants } from "@/lib/motion-tokens";
 
-export default function AboutPageClient() {
+export default function AboutClient() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const experienceRef = useRef(null);
-  const experienceInView = useInView(experienceRef, {
-    once: true,
-    amount: 0.1,
-  });
+  const skills = [
+    { name: "React/Next.js", level: 95, category: "Frontend" },
+    { name: "TypeScript", level: 90, category: "Language" },
+    { name: "Node.js", level: 85, category: "Backend" },
+    { name: "PostgreSQL", level: 80, category: "Database" },
+    { name: "Docker", level: 75, category: "DevOps" },
+    { name: "AWS", level: 70, category: "Cloud" },
+  ];
+
+  const experience = [
+    {
+      period: "2023 - Presente",
+      role: "Senior Full-Stack Developer",
+      company: "Freelancer",
+      description: "Desenvolvimento de aplicações web modernas com React, Next.js e Node.js",
+      technologies: ["React", "Next.js", "TypeScript", "Supabase"],
+    },
+    {
+      period: "2021 - 2023",
+      role: "Full-Stack Developer",
+      company: "Tech Company",
+      description: "Criação de plataformas SaaS e sistemas de gestão empresarial",
+      technologies: ["Vue.js", "Laravel", "MySQL", "Docker"],
+    },
+    {
+      period: "2019 - 2021",
+      role: "Frontend Developer",
+      company: "Digital Agency",
+      description: "Desenvolvimento de websites e aplicações web responsivas",
+      technologies: ["HTML", "CSS", "JavaScript", "WordPress"],
+    },
+  ];
 
   return (
-    <div className="relative min-h-screen">
-      {/* Clean background with subtle pattern */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-muted/5 via-transparent to-accent/5" />
-        <div
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle at 25% 25%, oklch(var(--primary)) 1px, transparent 1px),
-              radial-gradient(circle at 75% 75%, oklch(var(--accent)) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-            backgroundPosition: "0 0, 30px 30px",
-          }}
-        />
-      </div>
-
-      {/* SEO Content - Visible to search engines */}
-      <div className="sr-only">
-        <h1>Carlos Bicho - Desenvolvedor Full-Stack</h1>
-        <p>
-          Desenvolvedor com mais de 8 anos de experiência especializado em
-          React, Next.js, TypeScript e tecnologias modernas. Localizado em
-          Portugal, crio experiências web que fazem a diferença com foco na
-          performance e experiência do utilizador.
-        </p>
-        <h2>Experiência Profissional</h2>
-        <h3>Senior Full-Stack Developer</h3>
-        <p>
-          Tech Company, 2022 - Presente. Liderança de desenvolvimento de
-          aplicações web complexas, mentoria de developers juniores e
-          implementação de arquiteturas escaláveis.
-        </p>
-        <h3>
-          Tecnologias: React, Next.js, TypeScript, Node.js, PostgreSQL,
-          Supabase, Prisma, Docker, Vercel
-        </h3>
-        <h2>Interesses Pessoais</h2>
-        <p>
-          Café de especialidade, música e fotografia alimentam minha
-          criatividade como desenvolvedor.
-        </p>
-      </div>
-
+    <div className="min-h-screen py-20">
       {/* Hero Section */}
-      <motion.section
+      <motion.section 
         ref={ref}
-        className="container mx-auto px-4 py-16 md:py-24"
+        className="container mx-auto px-4 mb-20"
+        variants={variants.staggerContainer}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
       >
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            variants={scrollVariants.slideUp}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="text-center mb-12"
-          >
-            {/* Badge with sparkle effect */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full glass border"
+        {/* Animated Badge */}
+        <motion.div 
+          variants={variants.staggerItem}
+          className="flex justify-center mb-8"
+        >
+          <Badge variant="outline" className="glass px-4 py-2">
+            <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
+            Sobre Mim
+          </Badge>
+        </motion.div>
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Text Content */}
+          <div className="space-y-6">
+            <motion.h1 
+              className="text-5xl lg:text-6xl font-bold gradient-text"
+              variants={variants.slideUp}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
             >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              >
-                <Sparkles className="w-4 h-4 text-primary" />
-              </motion.div>
-              <span className="text-sm font-medium text-muted-foreground">
-                Sobre • Portfolio 2025
-              </span>
-            </motion.div>
+              Desenvolvedor Full-Stack
+            </motion.h1>
+            
+            <motion.p 
+              className="text-xl text-muted-foreground leading-relaxed"
+              variants={variants.staggerItem}
+            >
+              Especializado em criar experiências digitais excepcionais com tecnologias modernas. 
+              Apaixonado por código limpo, performance e design centrado no utilizador.
+            </motion.p>
 
-            <h1 className="text-fluid-3xl font-bold mb-6 gradient-text">
-              Sobre Mim
-            </h1>
-            <p className="text-fluid-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Desenvolvedor apaixonado por tecnologia, sempre em busca de
-              soluções elegantes para problemas complexos. Aqui está a minha
-              história.
-            </p>
-          </motion.div>
-
-          {/* Imagem e Bio Principal */}
-          <motion.div
-            variants={variants.staggerContainer}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="grid md:grid-cols-2 gap-12 items-center mb-16"
-          >
-            <motion.div variants={variants.staggerItem}>
-              <Avatar
-                size="xl"
-                className="mx-auto md:mx-0"
-                alt="Carlos Bicho - Foto profissional temporária"
-              />
-            </motion.div>
-
-            <motion.div variants={variants.staggerItem} className="space-y-6">
-              <h2 className="text-fluid-2xl font-bold">Carlos Bicho</h2>
-              <p className="text-fluid-lg text-muted-foreground leading-relaxed">
-                Comecei a programar há mais de 8 anos e desde então tenho-me
-                dedicado a criar experiências web que fazem a diferença.
-                Especializo-me em tecnologias modernas como React, Next.js e
-                TypeScript, sempre com foco na performance e experiência do
-                utilizador.
-              </p>
-
-              <div className="flex flex-wrap gap-4 text-sm">
-                <div className="flex items-center gap-2 px-3 py-2 rounded-full glass border">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  <span>Portugal</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-2 rounded-full glass border">
-                  <Calendar className="w-4 h-4 text-primary" />
-                  <span>8+ anos de experiência</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-2 rounded-full glass border">
-                  <Code className="w-4 h-4 text-primary" />
-                  <span>Full-Stack Developer</span>
-                </div>
+            <motion.div 
+              className="flex items-center gap-4 text-muted-foreground"
+              variants={variants.staggerItem}
+            >
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span>Portugal</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                <span>+5 anos experiência</span>
               </div>
             </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div 
+              className="flex flex-wrap gap-4"
+              variants={variants.staggerItem}
+            >
+              <MagneticButton
+                className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-medium transition-colors gap-2 inline-flex items-center"
+                onClick={() => window.open('/cv.pdf', '_blank')}
+              >
+                <Download className="w-4 h-4" />
+                Download CV
+              </MagneticButton>
+              
+              <MagneticButton
+                className="px-6 py-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md font-medium transition-colors gap-2 inline-flex items-center"
+                onClick={() => window.location.href = '/contact'}
+              >
+                <Mail className="w-4 h-4" />
+                Contactar
+              </MagneticButton>
+            </motion.div>
+          </div>
+
+          {/* Avatar & Stats */}
+          <motion.div 
+            className="flex justify-center lg:justify-end"
+            variants={variants.staggerItem}
+          >
+            <div className="relative isolate">
+              {/* Avatar */}
+              <div className="relative z-0">
+                <Avatar 
+                  size="xl" 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
+                  alt="Carlos Bicho"
+                  className="shadow-consistent-lg"
+                />
+              </div>
+              
+              {/* Floating Stats - Top Right */}
+              <motion.div 
+                className="absolute -top-4 -right-4 glass p-3 rounded-xl border z-30 shadow-consistent-lg backdrop-blur-sm"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.8 }}
+                style={{ transform: 'translateZ(0)' }}
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">50+</div>
+                  <div className="text-xs text-muted-foreground">Projetos</div>
+                </div>
+              </motion.div>
+              
+              {/* Floating Stats - Bottom Left */}
+              <motion.div 
+                className="absolute -bottom-4 -left-4 glass p-3 rounded-xl border z-30 shadow-consistent-lg backdrop-blur-sm"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1 }}
+                style={{ transform: 'translateZ(0)' }}
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">5+</div>
+                  <div className="text-xs text-muted-foreground">Anos</div>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* Experiência */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            ref={experienceRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={
-              experienceInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
-            }
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-fluid-2xl font-bold mb-6 gradient-text">
-              Experiência Profissional
-            </h2>
-          </motion.div>
+      {/* Experience Timeline */}
+      <motion.section 
+        className="container mx-auto px-4 mb-20"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <motion.h2 
+          className="text-3xl font-bold text-center mb-12"
+          variants={variants.slideUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          Experiência Profissional
+        </motion.h2>
 
-          <motion.div
-            variants={variants.staggerContainer}
-            initial="hidden"
-            animate={experienceInView ? "visible" : "hidden"}
-            className="space-y-8"
-          >
-            <motion.div variants={variants.staggerItem}>
-              <Card className="glass border hover:shadow-xl transition-all duration-300">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-fluid-lg">
-                        Senior Full-Stack Developer
-                      </CardTitle>
-                      <CardDescription className="text-fluid-base">
-                        Tech Company • 2022 - Presente
-                      </CardDescription>
-                    </div>
-                    <Badge
-                      variant="default"
-                      className="bg-gradient-primary text-white"
-                    >
-                      Atual
+        <div className="max-w-4xl mx-auto">
+          {experience.map((exp, index) => (
+            <motion.div 
+              key={index}
+              className="relative pl-8 pb-12 last:pb-0"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.2 }}
+            >
+              {/* Timeline Line */}
+              {index < experience.length - 1 && (
+                <div className="absolute left-3 top-8 w-0.5 h-full bg-border" />
+              )}
+              
+              {/* Timeline Dot */}
+              <div className="absolute left-0 top-2 w-6 h-6 bg-primary rounded-full border-4 border-background shadow-lg" />
+              
+              {/* Content */}
+              <div className="glass p-6 rounded-xl border ml-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                  <h3 className="text-xl font-bold">{exp.role}</h3>
+                  <Badge variant="secondary">{exp.period}</Badge>
+                </div>
+                
+                <h4 className="text-lg text-primary font-semibold mb-2">{exp.company}</h4>
+                <p className="text-muted-foreground mb-4">{exp.description}</p>
+                
+                <div className="flex flex-wrap gap-2">
+                  {exp.technologies.map((tech) => (
+                    <Badge key={tech} variant="outline" className="text-xs">
+                      {tech}
                     </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 text-fluid-base">
-                    Lidero o desenvolvimento de aplicações web complexas,
-                    mentorizo developers juniores e implemento arquiteturas
-                    escaláveis.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      "React",
-                      "Next.js",
-                      "TypeScript",
-                      "Node.js",
-                      "PostgreSQL",
-                    ].map((tech) => (
-                      <Badge
-                        key={tech}
-                        variant="outline"
-                        className="hover:bg-primary/10 transition-colors"
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={variants.staggerItem}>
-              <Card className="glass border hover:shadow-xl transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-fluid-lg">
-                    Frontend Developer
-                  </CardTitle>
-                  <CardDescription className="text-fluid-base">
-                    Startup • 2020 - 2022
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 text-fluid-base">
-                    Desenvolvi interfaces modernas e responsivas, implementei
-                    design systems e otimizei performance de aplicações.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["React", "Vue.js", "Tailwind CSS", "JavaScript"].map(
-                      (tech) => (
-                        <Badge
-                          key={tech}
-                          variant="outline"
-                          className="hover:bg-primary/10 transition-colors"
-                        >
-                          {tech}
-                        </Badge>
-                      )
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={variants.staggerItem}>
-              <Card className="glass border hover:shadow-xl transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-fluid-lg">
-                    Junior Developer
-                  </CardTitle>
-                  <CardDescription className="text-fluid-base">
-                    Agência Digital • 2018 - 2020
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 text-fluid-base">
-                    Primeiros passos no desenvolvimento web, criação de sites
-                    responsivos e aprendizagem de boas práticas de código.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["HTML", "CSS", "JavaScript", "WordPress"].map((tech) => (
-                      <Badge
-                        key={tech}
-                        variant="outline"
-                        className="hover:bg-primary/10 transition-colors"
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Skills técnicas */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-fluid-2xl font-bold mb-6 gradient-text">
-              Competências Técnicas
-            </h2>
-            <p className="text-fluid-lg text-muted-foreground max-w-2xl mx-auto">
-              Tecnologias e ferramentas que utilizo no meu dia a dia para criar
-              soluções eficientes e escaláveis.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="glass border hover:shadow-xl transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-fluid-lg">Frontend</CardTitle>
-                <CardDescription className="text-fluid-base">
-                  Tecnologias para interfaces modernas
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { name: "React", level: "Avançado" },
-                    { name: "Next.js", level: "Avançado" },
-                    { name: "TypeScript", level: "Avançado" },
-                    { name: "Tailwind CSS", level: "Avançado" },
-                    { name: "Vue.js", level: "Intermédio" },
-                  ].map((skill) => (
-                    <div
-                      key={skill.name}
-                      className="flex justify-between items-center p-2 rounded-lg hover:bg-accent/50 transition-colors"
-                    >
-                      <span className="text-fluid-base">{skill.name}</span>
-                      <Badge
-                        variant={
-                          skill.level === "Avançado" ? "default" : "secondary"
-                        }
-                        className={
-                          skill.level === "Avançado"
-                            ? "bg-gradient-primary text-white"
-                            : ""
-                        }
-                      >
-                        {skill.level}
-                      </Badge>
-                    </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
 
-            <Card className="glass border hover:shadow-xl transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-fluid-lg">Backend</CardTitle>
-                <CardDescription className="text-fluid-base">
-                  Tecnologias para APIs e bases de dados
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { name: "Node.js", level: "Avançado" },
-                    { name: "PostgreSQL", level: "Avançado" },
-                    { name: "Supabase", level: "Avançado" },
-                    { name: "Prisma", level: "Intermédio" },
-                    { name: "Docker", level: "Intermédio" },
-                  ].map((skill) => (
-                    <div
-                      key={skill.name}
-                      className="flex justify-between items-center p-2 rounded-lg hover:bg-accent/50 transition-colors"
-                    >
-                      <span className="text-fluid-base">{skill.name}</span>
-                      <Badge
-                        variant={
-                          skill.level === "Avançado" ? "default" : "secondary"
-                        }
-                        className={
-                          skill.level === "Avançado"
-                            ? "bg-gradient-primary text-white"
-                            : ""
-                        }
-                      >
-                        {skill.level}
-                      </Badge>
-                    </div>
-                  ))}
+      {/* Skills Section */}
+      <motion.section 
+        className="container mx-auto px-4 mb-20"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <motion.h2 
+          className="text-3xl font-bold text-center mb-12"
+          variants={variants.slideUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          Competências Técnicas
+        </motion.h2>
+
+        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
+          {skills.map((skill, index) => (
+            <motion.div 
+              key={skill.name}
+              className="glass p-6 rounded-xl border"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-semibold">{skill.name}</h3>
+                <Badge variant="outline" className="text-xs">
+                  {skill.category}
+                </Badge>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Proficiência</span>
+                  <span className="font-medium">{skill.level}%</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                
+                <div className="w-full bg-muted rounded-full h-2">
+                  <motion.div 
+                    className="bg-gradient-to-r from-primary to-accent h-2 rounded-full"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${skill.level}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: index * 0.1 }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </motion.section>
 
-      {/* Interesses */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+      {/* CTA Section */}
+      <motion.section 
+        className="container mx-auto px-4 text-center"
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="glass p-8 rounded-2xl border max-w-2xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
-            <h2 className="text-fluid-2xl font-bold mb-6 gradient-text">
-              Quando Não Estou a Programar
+            <h2 className="text-3xl font-bold mb-4">
+              Vamos trabalhar juntos?
             </h2>
-            <p className="text-fluid-lg text-muted-foreground max-w-2xl mx-auto">
-              Acredito que um bom desenvolvedor tem interesses diversificados
-              que alimentam a criatividade.
+            <p className="text-muted-foreground mb-6">
+              Estou sempre interessado em novos projetos e oportunidades de colaboração.
             </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Coffee,
-                title: "Café de Especialidade",
-                description:
-                  "Explorar diferentes métodos de extração e origins",
-              },
-              {
-                icon: Music,
-                title: "Música",
-                description: "Desde jazz clássico a electronic music moderna",
-              },
-              {
-                icon: Camera,
-                title: "Fotografia",
-                description: "Capturar momentos e paisagens únicas",
-              },
-            ].map((interest, index) => {
-              const Icon = interest.icon;
-              return (
-                <motion.div
-                  key={interest.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                >
-                  <Card className="glass border hover:shadow-xl transition-all duration-300 text-center">
-                    <CardContent className="pt-6">
-                      <motion.div
-                        whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
-                        transition={{ duration: 0.3 }}
-                        className="w-16 h-16 mx-auto mb-4 rounded-full glass border flex items-center justify-center"
-                      >
-                        <Icon className="w-8 h-8 text-primary" />
-                      </motion.div>
-                      <h3 className="text-fluid-lg font-semibold mb-2">
-                        {interest.title}
-                      </h3>
-                      <p className="text-fluid-base text-muted-foreground">
-                        {interest.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="glass border rounded-2xl p-8"
-          >
-            <h2 className="text-fluid-2xl font-bold mb-4 gradient-text">
-              Vamos Trabalhar Juntos?
-            </h2>
-            <p className="text-fluid-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Está à procura de um desenvolvedor apaixonado e dedicado para o
-              seu próximo projeto? Adoraria ouvir as suas ideias!
-            </p>
-
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <MagneticButton
-                strength={0.4}
-                distance={60}
-                className="group relative overflow-hidden px-8 py-4 rounded-full gradient-primary text-white font-medium shadow-consistent-lg hover:shadow-glow"
+                className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-medium transition-colors gap-2 inline-flex items-center"
+                onClick={() => window.location.href = '/projects'}
               >
-                <Link
-                  href="/contact"
-                  className="relative z-10 flex items-center gap-2"
-                >
-                  <span>Entrar em Contacto</span>
-                  <motion.div
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </motion.div>
-                </Link>
+                <Code2 className="w-4 h-4" />
+                Ver Projetos
+                <ArrowRight className="w-4 h-4" />
               </MagneticButton>
-
+              
               <MagneticButton
-                strength={0.3}
-                distance={50}
-                className="px-8 py-4 rounded-full btn-outline-consistent shadow-consistent-sm hover:shadow-consistent-md transition-all duration-300"
+                className="px-6 py-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md font-medium transition-colors gap-2 inline-flex items-center"
+                onClick={() => window.open('https://linkedin.com/in/carlos-bicho', '_blank')}
               >
-                <Link href="/projects">Ver Projetos</Link>
+                <ExternalLink className="w-4 h-4" />
+                LinkedIn
               </MagneticButton>
             </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }
